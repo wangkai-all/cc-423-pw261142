@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Coverage lab — interval-exact acquisition coverage</title>
+<link rel="stylesheet" href="/static/app.css" />
+</head>
+<body class="viz-root">
+<header class="topbar">
+  <div class="brand">
+    <span class="brand-mark" aria-hidden="true"></span>
+    <div>
+      <h1>Coverage lab</h1>
+      <p class="sub">Merged intervals, not event counts. Unprovable ranges stay unknown.</p>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="revision" id="revision-chip" title="Store revision this view was computed from">rev —</span>
+    <button class="ghost" id="refresh-btn" type="button">Recompute now</button>
+    <button class="ghost" id="theme-btn" type="button" aria-label="Toggle colour theme">Theme</button>
+  </div>
+</header>
+
+<main>
+  <section class="controls" aria-label="Run controls">
+    <div class="control-block">
+      <span class="control-label">Snapshot</span>
+      <select id="run-b-select" aria-label="Compare current view against a stored run"></select>
+      <button class="primary" id="compare-btn" type="button">Compare with current</button>
+    </div>
+    <div class="control-block">
+      <span class="control-label">New analysis run</span>
+      <input id="run-note" type="text" placeholder="note, e.g. after node restart" maxlength="80" />
+      <button class="primary" id="snapshot-btn" type="button">Store snapshot</button>
+    </div>
+  </section>
+
+  <p class="status-line" id="status-line" role="status" aria-live="polite"></p>
+
+  <section class="tiles" id="tiles" aria-label="Headline figures"></section>
+
+  <section class="card" aria-labelledby="groups-title">
+    <div class="card-head">
+      <div>
+        <h2 id="groups-title">Group coverage by declared window</h2>
+        <p class="card-sub">Each node is measured against its own declared window, then summed. Groups with an unknown member show no ratio — never a guessed one.</p>
+      </div>
+      <button class="ghost small" id="groups-table-btn" type="button" aria-pressed="false">Table view</button>
+    </div>
+    <div id="groups-chart" class="groups-chart"></div>
+    <div id="groups-table" class="table-wrap" hidden></div>
+  </section>
+
+  <section class="card" aria-labelledby="nodes-title">
+    <div class="card-head">
+      <div>
+        <h2 id="nodes-title">Node timelines</h2>
+        <p class="card-sub">Covered ticks are a single solid run; gaps keep tick coordinates. Click any gap to expand its evidence, or Inspect a node to act on it.</p>
+      </div>
+      <div class="card-tools">
+        <div class="legend" aria-label="Legend">
+          <span class="legend-item"><span class="swatch covered"></span>Covered in window</span>
+          <span class="legend-item"><span class="swatch outside"></span>Claimed outside window (excluded)</span>
+          <span class="legend-item"><span class="swatch unknown"></span>No declared window</span>
+          <span class="legend-item"><span class="swatch gap"></span>Gap</span>
+          <span class="legend-item"><span class="swatch retracted"></span>Retraction</span>
+          <span class="legend-item"><span class="status-dot running"></span>Running</span>
+          <span class="legend-item"><span class="status-dot stopped"></span>Stopped</span>
+        </div>
+        <button class="ghost small" id="nodes-table-btn" type="button" aria-pressed="false">Table view</button>
+      </div>
+    </div>
+    <div id="nodes-chart" class="nodes-chart"></div>
+    <div id="nodes-table" class="table-wrap" hidden></div>
+  </section>
+
+  <section class="card" id="inspector-card" aria-labelledby="inspector-title" hidden>
+    <div class="card-head">
+      <div>
+        <h2 id="inspector-title">Gap evidence</h2>
+        <p class="card-sub" id="inspector-sub"></p>
+      </div>
+      <button class="ghost small" id="close-inspector" type="button">Close</button>
+    </div>
+    <div id="inspector-body" class="inspector-body"></div>
+  </section>
+
+  <section class="card" aria-labelledby="compare-title">
+    <div class="card-head">
+      <div>
+        <h2 id="compare-title">Effect of the latest revision on each group</h2>
+        <p class="card-sub" id="compare-sub">What changed between the two most recent stored analysis runs.</p>
+      </div>
+    </div>
+    <div id="compare-body" class="table-wrap"></div>
+  </section>
+
+  <footer class="foot">
+    <p>Ratios are exact fractions of declared ticks (reported as a simplified fraction). No confidence intervals are computed or implied — the data records which ticks were actually reported, so there is no sampling to estimate.</p>
+  </footer>
+</main>
+<div class="tooltip" id="tooltip" role="tooltip" hidden></div>
+<script src="/static/app.js"></script>
+</body>
+</html>
